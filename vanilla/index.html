@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body style="height:100vh;width:100vw;display: flex;justify-content:center;align-items:center;">
+  <canvas id="main"></canvas>
+
+  <script src="js/three.js"></script>
+  <script>
+    function main() {
+      const canvas = document.getElementById('main')
+      const renderer = new THREE.WebGLRenderer({ canvas })
+
+      const fov = 75
+      const aspect = 2 // the canvas default (300x150)
+      const near = 0.1
+      const far = 5
+      const camera = new THREE.PerspectiveCamera(fov, aspect, near, far)
+      camera.position.z = 2 // needed to properly display the items because of frustum
+
+      const scene = new THREE.Scene()
+
+      const boxWidth = 1
+      const boxHeight = 1
+      const boxDepth = 1
+      const geometry = new THREE.BoxGeometry(boxWidth, boxHeight, boxDepth)
+      const material = new THREE.MeshPhongMaterial({ color: 0x44aa88 })
+
+      const cube = new THREE.Mesh(geometry, material)
+      scene.add(cube)
+
+      const color = 0xFFFFFF
+      const intensity = 1
+      const light = new THREE.DirectionalLight(color, intensity)
+      light.position.set(-1, 2, 4) // x, y, z
+      scene.add(light)
+
+      function render(time) {
+        time *= 0.001 // convert time to seconds
+
+        cube.rotation.x = time
+        cube.rotation.y = time
+
+        renderer.render(scene, camera)
+
+        requestAnimationFrame(render)
+      }
+
+      requestAnimationFrame(render)
+    }
+    main()
+  </script>
+</body>
+</html>
